@@ -1,0 +1,139 @@
+import foldersGetAutokeyConfig from "./folders/foldersGetAutokeyConfig";
+import foldersGetKajPolicyConfig from "./folders/foldersGetKajPolicyConfig";
+import foldersUpdateKajPolicyConfig from "./folders/foldersUpdateKajPolicyConfig";
+import foldersUpdateAutokeyConfig from "./folders/foldersUpdateAutokeyConfig";
+import organizationsUpdateKajPolicyConfig from "./organizations/organizationsUpdateKajPolicyConfig";
+import organizationsGetKajPolicyConfig from "./organizations/organizationsGetKajPolicyConfig";
+import updateKajPolicyConfig from "./update_kaj_policy_config/updateKajPolicyConfig";
+import showEffectiveAutokeyConfig from "./show_effective_autokey_config/showEffectiveAutokeyConfig";
+import showEffectiveKeyAccessJustificationsPolicyConfig from "./show_effective_key_access_justifications_policy_config/showEffectiveKeyAccessJustificationsPolicyConfig";
+import showEffectiveKeyAccessJustificationsEnrollmentConfig from "./show_effective_key_access_justifications_enrollment_config/showEffectiveKeyAccessJustificationsEnrollmentConfig";
+import getKajPolicyConfig from "./get_kaj_policy_config/getKajPolicyConfig";
+import locationsGet from "./locations/locationsGet";
+import locationsGenerateRandomBytes from "./locations/locationsGenerateRandomBytes";
+import locationsGetEkmConfig from "./locations/locationsGetEkmConfig";
+import locationsUpdateEkmConfig from "./locations/locationsUpdateEkmConfig";
+import locationsList from "./locations/locationsList";
+import locationsEkmConnectionsGet from "./locations/locationsEkmConnectionsGet";
+import locationsEkmConnectionsGetIamPolicy from "./locations/locationsEkmConnectionsGetIamPolicy";
+import locationsEkmConnectionsTestIamPermissions from "./locations/locationsEkmConnectionsTestIamPermissions";
+import locationsEkmConnectionsPatch from "./locations/locationsEkmConnectionsPatch";
+import locationsEkmConnectionsSetIamPolicy from "./locations/locationsEkmConnectionsSetIamPolicy";
+import locationsEkmConnectionsList from "./locations/locationsEkmConnectionsList";
+import locationsEkmConnectionsVerifyConnectivity from "./locations/locationsEkmConnectionsVerifyConnectivity";
+import locationsEkmConnectionsCreate from "./locations/locationsEkmConnectionsCreate";
+import locationsOperationsGet from "./locations/locationsOperationsGet";
+import locationsKeyHandlesGet from "./locations/locationsKeyHandlesGet";
+import locationsKeyHandlesList from "./locations/locationsKeyHandlesList";
+import locationsKeyHandlesCreate from "./locations/locationsKeyHandlesCreate";
+import locationsEkmConfigGetIamPolicy from "./locations/locationsEkmConfigGetIamPolicy";
+import locationsEkmConfigSetIamPolicy from "./locations/locationsEkmConfigSetIamPolicy";
+import locationsEkmConfigTestIamPermissions from "./locations/locationsEkmConfigTestIamPermissions";
+import locationsKeyRingsGet from "./locations/locationsKeyRingsGet";
+import locationsKeyRingsGetIamPolicy from "./locations/locationsKeyRingsGetIamPolicy";
+import locationsKeyRingsTestIamPermissions from "./locations/locationsKeyRingsTestIamPermissions";
+import locationsKeyRingsList from "./locations/locationsKeyRingsList";
+import locationsKeyRingsSetIamPolicy from "./locations/locationsKeyRingsSetIamPolicy";
+import locationsKeyRingsCreate from "./locations/locationsKeyRingsCreate";
+import locationsKeyRingsImportJobsGetIamPolicy from "./locations/locationsKeyRingsImportJobsGetIamPolicy";
+import locationsKeyRingsImportJobsCreate from "./locations/locationsKeyRingsImportJobsCreate";
+import locationsKeyRingsImportJobsSetIamPolicy from "./locations/locationsKeyRingsImportJobsSetIamPolicy";
+import locationsKeyRingsImportJobsGet from "./locations/locationsKeyRingsImportJobsGet";
+import locationsKeyRingsImportJobsList from "./locations/locationsKeyRingsImportJobsList";
+import locationsKeyRingsImportJobsTestIamPermissions from "./locations/locationsKeyRingsImportJobsTestIamPermissions";
+import locationsKeyRingsCryptoKeysGet from "./locations/locationsKeyRingsCryptoKeysGet";
+import locationsKeyRingsCryptoKeysDecrypt from "./locations/locationsKeyRingsCryptoKeysDecrypt";
+import locationsKeyRingsCryptoKeysPatch from "./locations/locationsKeyRingsCryptoKeysPatch";
+import locationsKeyRingsCryptoKeysSetIamPolicy from "./locations/locationsKeyRingsCryptoKeysSetIamPolicy";
+import locationsKeyRingsCryptoKeysUpdatePrimaryVersion from "./locations/locationsKeyRingsCryptoKeysUpdatePrimaryVersion";
+import locationsKeyRingsCryptoKeysEncrypt from "./locations/locationsKeyRingsCryptoKeysEncrypt";
+import locationsKeyRingsCryptoKeysGetIamPolicy from "./locations/locationsKeyRingsCryptoKeysGetIamPolicy";
+import locationsKeyRingsCryptoKeysCreate from "./locations/locationsKeyRingsCryptoKeysCreate";
+import locationsKeyRingsCryptoKeysList from "./locations/locationsKeyRingsCryptoKeysList";
+import locationsKeyRingsCryptoKeysTestIamPermissions from "./locations/locationsKeyRingsCryptoKeysTestIamPermissions";
+import locationsKeyRingsCryptoKeysCryptoKeyVersionsImport from "./locations/locationsKeyRingsCryptoKeysCryptoKeyVersionsImport";
+import locationsKeyRingsCryptoKeysCryptoKeyVersionsDestroy from "./locations/locationsKeyRingsCryptoKeysCryptoKeyVersionsDestroy";
+import locationsKeyRingsCryptoKeysCryptoKeyVersionsDecapsulate from "./locations/locationsKeyRingsCryptoKeysCryptoKeyVersionsDecapsulate";
+import locationsKeyRingsCryptoKeysCryptoKeyVersionsMacSign from "./locations/locationsKeyRingsCryptoKeysCryptoKeyVersionsMacSign";
+import locationsKeyRingsCryptoKeysCryptoKeyVersionsMacVerify from "./locations/locationsKeyRingsCryptoKeysCryptoKeyVersionsMacVerify";
+import locationsKeyRingsCryptoKeysCryptoKeyVersionsRawEncrypt from "./locations/locationsKeyRingsCryptoKeysCryptoKeyVersionsRawEncrypt";
+import locationsKeyRingsCryptoKeysCryptoKeyVersionsCreate from "./locations/locationsKeyRingsCryptoKeysCryptoKeyVersionsCreate";
+import locationsKeyRingsCryptoKeysCryptoKeyVersionsGetPublicKey from "./locations/locationsKeyRingsCryptoKeysCryptoKeyVersionsGetPublicKey";
+import locationsKeyRingsCryptoKeysCryptoKeyVersionsGet from "./locations/locationsKeyRingsCryptoKeysCryptoKeyVersionsGet";
+import locationsKeyRingsCryptoKeysCryptoKeyVersionsAsymmetricDecrypt from "./locations/locationsKeyRingsCryptoKeysCryptoKeyVersionsAsymmetricDecrypt";
+import locationsKeyRingsCryptoKeysCryptoKeyVersionsList from "./locations/locationsKeyRingsCryptoKeysCryptoKeyVersionsList";
+import locationsKeyRingsCryptoKeysCryptoKeyVersionsPatch from "./locations/locationsKeyRingsCryptoKeysCryptoKeyVersionsPatch";
+import locationsKeyRingsCryptoKeysCryptoKeyVersionsRestore from "./locations/locationsKeyRingsCryptoKeysCryptoKeyVersionsRestore";
+import locationsKeyRingsCryptoKeysCryptoKeyVersionsRawDecrypt from "./locations/locationsKeyRingsCryptoKeysCryptoKeyVersionsRawDecrypt";
+import locationsKeyRingsCryptoKeysCryptoKeyVersionsAsymmetricSign from "./locations/locationsKeyRingsCryptoKeysCryptoKeyVersionsAsymmetricSign";
+
+export const blocks = {
+  foldersGetAutokeyConfig,
+  foldersGetKajPolicyConfig,
+  foldersUpdateKajPolicyConfig,
+  foldersUpdateAutokeyConfig,
+  organizationsUpdateKajPolicyConfig,
+  organizationsGetKajPolicyConfig,
+  updateKajPolicyConfig,
+  showEffectiveAutokeyConfig,
+  showEffectiveKeyAccessJustificationsPolicyConfig,
+  showEffectiveKeyAccessJustificationsEnrollmentConfig,
+  getKajPolicyConfig,
+  locationsGet,
+  locationsGenerateRandomBytes,
+  locationsGetEkmConfig,
+  locationsUpdateEkmConfig,
+  locationsList,
+  locationsEkmConnectionsGet,
+  locationsEkmConnectionsGetIamPolicy,
+  locationsEkmConnectionsTestIamPermissions,
+  locationsEkmConnectionsPatch,
+  locationsEkmConnectionsSetIamPolicy,
+  locationsEkmConnectionsList,
+  locationsEkmConnectionsVerifyConnectivity,
+  locationsEkmConnectionsCreate,
+  locationsOperationsGet,
+  locationsKeyHandlesGet,
+  locationsKeyHandlesList,
+  locationsKeyHandlesCreate,
+  locationsEkmConfigGetIamPolicy,
+  locationsEkmConfigSetIamPolicy,
+  locationsEkmConfigTestIamPermissions,
+  locationsKeyRingsGet,
+  locationsKeyRingsGetIamPolicy,
+  locationsKeyRingsTestIamPermissions,
+  locationsKeyRingsList,
+  locationsKeyRingsSetIamPolicy,
+  locationsKeyRingsCreate,
+  locationsKeyRingsImportJobsGetIamPolicy,
+  locationsKeyRingsImportJobsCreate,
+  locationsKeyRingsImportJobsSetIamPolicy,
+  locationsKeyRingsImportJobsGet,
+  locationsKeyRingsImportJobsList,
+  locationsKeyRingsImportJobsTestIamPermissions,
+  locationsKeyRingsCryptoKeysGet,
+  locationsKeyRingsCryptoKeysDecrypt,
+  locationsKeyRingsCryptoKeysPatch,
+  locationsKeyRingsCryptoKeysSetIamPolicy,
+  locationsKeyRingsCryptoKeysUpdatePrimaryVersion,
+  locationsKeyRingsCryptoKeysEncrypt,
+  locationsKeyRingsCryptoKeysGetIamPolicy,
+  locationsKeyRingsCryptoKeysCreate,
+  locationsKeyRingsCryptoKeysList,
+  locationsKeyRingsCryptoKeysTestIamPermissions,
+  locationsKeyRingsCryptoKeysCryptoKeyVersionsImport,
+  locationsKeyRingsCryptoKeysCryptoKeyVersionsDestroy,
+  locationsKeyRingsCryptoKeysCryptoKeyVersionsDecapsulate,
+  locationsKeyRingsCryptoKeysCryptoKeyVersionsMacSign,
+  locationsKeyRingsCryptoKeysCryptoKeyVersionsMacVerify,
+  locationsKeyRingsCryptoKeysCryptoKeyVersionsRawEncrypt,
+  locationsKeyRingsCryptoKeysCryptoKeyVersionsCreate,
+  locationsKeyRingsCryptoKeysCryptoKeyVersionsGetPublicKey,
+  locationsKeyRingsCryptoKeysCryptoKeyVersionsGet,
+  locationsKeyRingsCryptoKeysCryptoKeyVersionsAsymmetricDecrypt,
+  locationsKeyRingsCryptoKeysCryptoKeyVersionsList,
+  locationsKeyRingsCryptoKeysCryptoKeyVersionsPatch,
+  locationsKeyRingsCryptoKeysCryptoKeyVersionsRestore,
+  locationsKeyRingsCryptoKeysCryptoKeyVersionsRawDecrypt,
+  locationsKeyRingsCryptoKeysCryptoKeyVersionsAsymmetricSign,
+};

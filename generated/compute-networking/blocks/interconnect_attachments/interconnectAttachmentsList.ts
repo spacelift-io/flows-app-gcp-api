@@ -1,0 +1,369 @@
+import { AppBlock, events } from "@slflows/sdk/v1";
+import { GoogleAuth } from "google-auth-library";
+
+const interconnectAttachmentsList: AppBlock = {
+  name: "Interconnect Attachments - List",
+  description: `Retrieves the list of interconnect attachments contained within the specified region.`,
+  category: "Interconnect Attachments",
+  inputs: {
+    default: {
+      config: {
+        filter: {
+          name: "Filter",
+          description:
+            'A filter expression that filters resources listed in the response. Most\nCompute resources support two types of filter expressions:\nexpressions that support regular expressions and expressions that follow\nAPI improvement proposal AIP-160.\nThese two types of filter expressions cannot be mixed in one request.\n\nIf you want to use AIP-160, your expression must specify the field name, an\noperator, and the value that you want to use for filtering. The value\nmust be a string, a number, or a boolean. The operator\nmust be either `=`, `!=`, `>`, `<`, `<=`, `>=` or `:`.\n\nFor example, if you are filtering Compute Engine instances, you can\nexclude instances named `example-instance` by specifying\n`name != example-instance`.\n\nThe `:*` comparison can be used to test whether a key has been defined.\nFor example, to find all objects with `owner` label use:\n```\nlabels.owner:*\n```\n\nYou can also filter nested fields. For example, you could specify\n`scheduling.automaticRestart = false` to include instances only\nif they are not scheduled for automatic restarts. You can use filtering\non nested fields to filter based onresource labels.\n\nTo filter on multiple expressions, provide each separate expression within\nparentheses. For example:\n```\n(scheduling.automaticRestart = true)\n(cpuPlatform = "Intel Skylake")\n```\nBy default, each expression is an `AND` expression. However, you\ncan include `AND` and `OR` expressions explicitly.\nFor example:\n```\n(cpuPlatform = "Intel Skylake") OR\n(cpuPlatform = "Intel Broadwell") AND\n(scheduling.automaticRestart = true)\n```\n\nIf you want to use a regular expression, use the `eq` (equal) or `ne`\n(not equal) operator against a single un-parenthesized expression with or\nwithout quotes or against multiple parenthesized expressions. Examples:\n\n`fieldname eq unquoted literal`\n`fieldname eq \'single quoted literal\'`\n`fieldname eq "double quoted literal"`\n`(fieldname1 eq literal) (fieldname2 ne "literal")`\n\nThe literal value is interpreted as a regular expression using GoogleRE2 library syntax.\nThe literal value must match the entire field.\n\nFor example, to filter for instances that do not end with name "instance",\nyou would use `name ne .*instance`.\n\nYou cannot combine constraints on multiple fields using regular\nexpressions.',
+          type: "string",
+          required: false,
+        },
+        project: {
+          name: "Project",
+          description: "Project ID for this request.",
+          type: "string",
+          required: true,
+        },
+        pageToken: {
+          name: "PageToken",
+          description:
+            "Specifies a page token to use. Set `pageToken` to the\n`nextPageToken` returned by a previous list request to get\nthe next page of results.",
+          type: "string",
+          required: false,
+        },
+        region: {
+          name: "Region",
+          description: "Name of the region for this request.",
+          type: "string",
+          required: true,
+        },
+        orderBy: {
+          name: "OrderBy",
+          description:
+            'Sorts list results by a certain order. By default, results\nare returned in alphanumerical order based on the resource name.\n\nYou can also sort results in descending order based on the creation\ntimestamp using `orderBy="creationTimestamp desc"`. This sorts\nresults based on the `creationTimestamp` field in\nreverse chronological order (newest result first). Use this to sort\nresources like operations so that the newest operation is returned first.\n\nCurrently, only sorting by `name` or\n`creationTimestamp desc` is supported.',
+          type: "string",
+          required: false,
+        },
+        maxResults: {
+          name: "MaxResults",
+          description:
+            "The maximum number of results per page that should be returned.\nIf the number of available results is larger than `maxResults`,\nCompute Engine returns a `nextPageToken` that can be used to get\nthe next page of results in subsequent list requests. Acceptable values are\n`0` to `500`, inclusive. (Default: `500`)",
+          type: "number",
+          required: false,
+        },
+        returnPartialSuccess: {
+          name: "ReturnPartialSuccess",
+          description:
+            "Opt-in for partial success behavior which provides partial results in case\nof failure. The default value is false.\n\nFor example, when partial success behavior is enabled, aggregatedList for a\nsingle zone scope either returns all resources in the zone or no resources,\nwith an error code.",
+          type: "boolean",
+          required: false,
+        },
+      },
+      onEvent: async (input) => {
+        // Parse service account credentials
+        const credentials = JSON.parse(input.app.config.serviceAccountKey);
+
+        // Initialize Google Auth
+        const auth = new GoogleAuth({
+          credentials,
+          scopes: [
+            "https://www.googleapis.com/auth/cloud-platform",
+            "https://www.googleapis.com/auth/compute",
+            "https://www.googleapis.com/auth/compute.readonly",
+          ],
+        });
+
+        const client = await auth.getClient();
+        const accessToken = await client.getAccessToken();
+
+        // Build request URL and parameters
+        const baseUrl = "https://compute.googleapis.com/compute/v1/";
+        const path = `projects/{project}/regions/{region}/interconnectAttachments`;
+        const url = baseUrl + path;
+
+        // Make API request using fetch
+        const requestOptions: RequestInit = {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${accessToken.token}`,
+            "Content-Type": "application/json",
+          },
+        };
+
+        const response = await fetch(url, requestOptions);
+
+        if (!response.ok) {
+          throw new Error(
+            `GCP API error: ${response.status} ${response.statusText}`,
+          );
+        }
+
+        const result = await response.json();
+        await events.emit(result || {});
+      },
+    },
+  },
+  outputs: {
+    default: {
+      possiblePrimaryParents: ["default"],
+      type: {
+        type: "object",
+        properties: {
+          kind: {
+            type: "string",
+          },
+          selfLink: {
+            type: "string",
+          },
+          nextPageToken: {
+            type: "string",
+          },
+          warning: {
+            type: "object",
+            properties: {
+              message: {
+                type: "string",
+              },
+              data: {
+                type: "array",
+                items: {
+                  type: "object",
+                  properties: {
+                    key: {
+                      type: "object",
+                      additionalProperties: true,
+                    },
+                    value: {
+                      type: "object",
+                      additionalProperties: true,
+                    },
+                  },
+                  additionalProperties: true,
+                },
+              },
+              code: {
+                type: "string",
+                enum: [
+                  "CLEANUP_FAILED",
+                  "DEPRECATED_RESOURCE_USED",
+                  "DEPRECATED_TYPE_USED",
+                  "DISK_SIZE_LARGER_THAN_IMAGE_SIZE",
+                  "EXPERIMENTAL_TYPE_USED",
+                  "EXTERNAL_API_WARNING",
+                  "FIELD_VALUE_OVERRIDEN",
+                  "INJECTED_KERNELS_DEPRECATED",
+                  "INVALID_HEALTH_CHECK_FOR_DYNAMIC_WIEGHTED_LB",
+                  "LARGE_DEPLOYMENT_WARNING",
+                  "LIST_OVERHEAD_QUOTA_EXCEED",
+                  "MISSING_TYPE_DEPENDENCY",
+                  "NEXT_HOP_ADDRESS_NOT_ASSIGNED",
+                  "NEXT_HOP_CANNOT_IP_FORWARD",
+                  "NEXT_HOP_INSTANCE_HAS_NO_IPV6_INTERFACE",
+                  "NEXT_HOP_INSTANCE_NOT_FOUND",
+                  "NEXT_HOP_INSTANCE_NOT_ON_NETWORK",
+                  "NEXT_HOP_NOT_RUNNING",
+                  "NOT_CRITICAL_ERROR",
+                  "NO_RESULTS_ON_PAGE",
+                  "PARTIAL_SUCCESS",
+                  "QUOTA_INFO_UNAVAILABLE",
+                  "REQUIRED_TOS_AGREEMENT",
+                  "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING",
+                  "RESOURCE_NOT_DELETED",
+                  "SCHEMA_VALIDATION_IGNORED",
+                  "SINGLE_INSTANCE_PROPERTY_TEMPLATE",
+                  "UNDECLARED_PROPERTIES",
+                  "UNREACHABLE",
+                ],
+              },
+            },
+            additionalProperties: true,
+          },
+          id: {
+            type: "string",
+          },
+          items: {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                stackType: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                kind: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                mtu: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                state: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                customerRouterIpAddress: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                vlanTag8021q: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                edgeAvailabilityDomain: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                ipsecInternalAddresses: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                pairingKey: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                cloudRouterIpAddress: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                dataplaneVersion: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                l2Forwarding: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                customerRouterIpv6InterfaceId: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                configurationConstraints: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                remoteService: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                adminEnabled: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                name: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                region: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                privateInterconnectInfo: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                googleReferenceId: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                description: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                id: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                labelFingerprint: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                customerRouterIpv6Address: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                attachmentGroup: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                interconnect: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                bandwidth: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                subnetLength: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                partnerMetadata: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                satisfiesPzs: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                operationalStatus: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                selfLink: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                cloudRouterIpv6Address: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                params: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                type: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                candidateSubnets: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                encryption: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                candidateIpv6Subnets: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                creationTimestamp: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                router: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                labels: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                partnerAsn: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+                cloudRouterIpv6InterfaceId: {
+                  type: "object",
+                  additionalProperties: true,
+                },
+              },
+              additionalProperties: true,
+            },
+          },
+        },
+        additionalProperties: true,
+      },
+    },
+  },
+};
+
+export default interconnectAttachmentsList;

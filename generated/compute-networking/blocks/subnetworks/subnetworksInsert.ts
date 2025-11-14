@@ -1,0 +1,484 @@
+import { AppBlock, events } from "@slflows/sdk/v1";
+import { GoogleAuth } from "google-auth-library";
+
+const subnetworksInsert: AppBlock = {
+  name: "Subnetworks - Insert",
+  description: `Creates a subnetwork in the specified project using the data included in the request.`,
+  category: "Subnetworks",
+  inputs: {
+    default: {
+      config: {
+        region: {
+          name: "Region",
+          description: "Name of the region scoping this request.",
+          type: "string",
+          required: true,
+        },
+        requestId: {
+          name: "RequestId",
+          description:
+            "An optional request ID to identify requests. Specify a unique request ID so\nthat if you must retry your request, the server will know to ignore the\nrequest if it has already been completed.\n\nFor example, consider a situation where you make an initial request and\nthe request times out. If you make the request again with the same\nrequest ID, the server can check if original operation with the same\nrequest ID was received, and if so, will ignore the second request. This\nprevents clients from accidentally creating duplicate commitments.\n\nThe request ID must be\na valid UUID with the exception that zero UUID is not supported\n(00000000-0000-0000-0000-000000000000).",
+          type: "string",
+          required: false,
+        },
+        project: {
+          name: "Project",
+          description: "Project ID for this request.",
+          type: "string",
+          required: true,
+        },
+        requestBody: {
+          name: "Request Body",
+          description:
+            "Represents a Subnetwork resource.\n\nA subnetwork (also known as a subnet) is a logical partition of a Virtual\nPrivate Cloud network with one primary IP range and zero or more secondary\nIP ranges. For more information, read\nVirtual Private Cloud (VPC) Network.",
+          type: {
+            type: "object",
+            properties: {
+              fingerprint: {
+                type: "string",
+              },
+              gatewayAddress: {
+                type: "string",
+              },
+              secondaryIpRanges: {
+                type: "array",
+                items: {
+                  type: "object",
+                  properties: {
+                    rangeName: {
+                      type: "object",
+                      additionalProperties: true,
+                    },
+                    reservedInternalRange: {
+                      type: "object",
+                      additionalProperties: true,
+                    },
+                    ipCidrRange: {
+                      type: "object",
+                      additionalProperties: true,
+                    },
+                  },
+                  additionalProperties: true,
+                },
+              },
+              region: {
+                type: "string",
+              },
+              reservedInternalRange: {
+                type: "string",
+              },
+              ipv6GceEndpoint: {
+                type: "string",
+                enum: ["VM_AND_FR", "VM_ONLY"],
+              },
+              systemReservedInternalIpv6Ranges: {
+                type: "array",
+                items: {
+                  type: "string",
+                },
+              },
+              purpose: {
+                type: "string",
+                enum: [
+                  "GLOBAL_MANAGED_PROXY",
+                  "INTERNAL_HTTPS_LOAD_BALANCER",
+                  "PEER_MIGRATION",
+                  "PRIVATE",
+                  "PRIVATE_NAT",
+                  "PRIVATE_RFC_1918",
+                  "PRIVATE_SERVICE_CONNECT",
+                  "REGIONAL_MANAGED_PROXY",
+                ],
+              },
+              creationTimestamp: {
+                type: "string",
+              },
+              state: {
+                type: "string",
+                enum: ["DRAINING", "READY"],
+              },
+              internalIpv6Prefix: {
+                type: "string",
+              },
+              privateIpGoogleAccess: {
+                type: "boolean",
+              },
+              ipv6CidrRange: {
+                type: "string",
+              },
+              network: {
+                type: "string",
+              },
+              selfLink: {
+                type: "string",
+              },
+              utilizationDetails: {
+                type: "object",
+                properties: {
+                  externalIpv6LbUtilization: {
+                    type: "object",
+                    additionalProperties: true,
+                  },
+                  externalIpv6InstanceUtilization: {
+                    type: "object",
+                    additionalProperties: true,
+                  },
+                  internalIpv6Utilization: {
+                    type: "object",
+                    additionalProperties: true,
+                  },
+                  ipv4Utilizations: {
+                    type: "array",
+                    items: {
+                      type: "object",
+                      additionalProperties: true,
+                    },
+                  },
+                },
+                additionalProperties: true,
+              },
+              externalIpv6Prefix: {
+                type: "string",
+              },
+              stackType: {
+                type: "string",
+                enum: ["IPV4_IPV6", "IPV4_ONLY", "IPV6_ONLY"],
+              },
+              systemReservedExternalIpv6Ranges: {
+                type: "array",
+                items: {
+                  type: "string",
+                },
+              },
+              privateIpv6GoogleAccess: {
+                type: "string",
+                enum: [
+                  "DISABLE_GOOGLE_ACCESS",
+                  "ENABLE_BIDIRECTIONAL_ACCESS_TO_GOOGLE",
+                  "ENABLE_OUTBOUND_VM_ACCESS_TO_GOOGLE",
+                ],
+              },
+              description: {
+                type: "string",
+              },
+              ipCidrRange: {
+                type: "string",
+              },
+              logConfig: {
+                type: "object",
+                properties: {
+                  flowSampling: {
+                    type: "number",
+                  },
+                  metadataFields: {
+                    type: "array",
+                    items: {
+                      type: "object",
+                      additionalProperties: true,
+                    },
+                  },
+                  metadata: {
+                    type: "string",
+                    enum: [
+                      "CUSTOM_METADATA",
+                      "EXCLUDE_ALL_METADATA",
+                      "INCLUDE_ALL_METADATA",
+                    ],
+                  },
+                  aggregationInterval: {
+                    type: "string",
+                    enum: [
+                      "INTERVAL_10_MIN",
+                      "INTERVAL_15_MIN",
+                      "INTERVAL_1_MIN",
+                      "INTERVAL_30_SEC",
+                      "INTERVAL_5_MIN",
+                      "INTERVAL_5_SEC",
+                    ],
+                  },
+                  enable: {
+                    type: "boolean",
+                  },
+                  filterExpr: {
+                    type: "string",
+                  },
+                },
+                additionalProperties: true,
+              },
+              ipv6AccessType: {
+                type: "string",
+                enum: ["EXTERNAL", "INTERNAL"],
+              },
+              role: {
+                type: "string",
+                enum: ["ACTIVE", "BACKUP"],
+              },
+              enableFlowLogs: {
+                type: "boolean",
+              },
+              ipCollection: {
+                type: "string",
+              },
+              id: {
+                type: "string",
+              },
+              name: {
+                type: "string",
+              },
+              kind: {
+                type: "string",
+              },
+              params: {
+                type: "object",
+                properties: {
+                  resourceManagerTags: {
+                    type: "object",
+                    additionalProperties: true,
+                  },
+                },
+                additionalProperties: true,
+              },
+            },
+            additionalProperties: true,
+          },
+          required: true,
+        },
+      },
+      onEvent: async (input) => {
+        // Parse service account credentials
+        const credentials = JSON.parse(input.app.config.serviceAccountKey);
+
+        // Initialize Google Auth
+        const auth = new GoogleAuth({
+          credentials,
+          scopes: [
+            "https://www.googleapis.com/auth/cloud-platform",
+            "https://www.googleapis.com/auth/compute",
+          ],
+        });
+
+        const client = await auth.getClient();
+        const accessToken = await client.getAccessToken();
+
+        // Build request URL and parameters
+        const baseUrl = "https://compute.googleapis.com/compute/v1/";
+        const path = `projects/{project}/regions/{region}/subnetworks`;
+        const url = baseUrl + path;
+
+        // Make API request using fetch
+        const requestOptions: RequestInit = {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${accessToken.token}`,
+            "Content-Type": "application/json",
+          },
+        };
+
+        // Add request body
+        if (input.event.inputConfig.requestBody) {
+          requestOptions.body = JSON.stringify(
+            input.event.inputConfig.requestBody,
+          );
+        }
+
+        const response = await fetch(url, requestOptions);
+
+        if (!response.ok) {
+          throw new Error(
+            `GCP API error: ${response.status} ${response.statusText}`,
+          );
+        }
+
+        const result = await response.json();
+        await events.emit(result || {});
+      },
+    },
+  },
+  outputs: {
+    default: {
+      possiblePrimaryParents: ["default"],
+      type: {
+        type: "object",
+        properties: {
+          targetId: {
+            type: "string",
+          },
+          creationTimestamp: {
+            type: "string",
+          },
+          httpErrorMessage: {
+            type: "string",
+          },
+          kind: {
+            type: "string",
+          },
+          setCommonInstanceMetadataOperationMetadata: {
+            type: "object",
+            properties: {
+              perLocationOperations: {
+                type: "object",
+                additionalProperties: true,
+              },
+              clientOperationId: {
+                type: "string",
+              },
+            },
+            additionalProperties: true,
+          },
+          id: {
+            type: "string",
+          },
+          region: {
+            type: "string",
+          },
+          startTime: {
+            type: "string",
+          },
+          zone: {
+            type: "string",
+          },
+          statusMessage: {
+            type: "string",
+          },
+          user: {
+            type: "string",
+          },
+          warnings: {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                message: {
+                  type: "string",
+                },
+                data: {
+                  type: "array",
+                  items: {
+                    type: "object",
+                    additionalProperties: true,
+                  },
+                },
+                code: {
+                  type: "string",
+                  enum: [
+                    "CLEANUP_FAILED",
+                    "DEPRECATED_RESOURCE_USED",
+                    "DEPRECATED_TYPE_USED",
+                    "DISK_SIZE_LARGER_THAN_IMAGE_SIZE",
+                    "EXPERIMENTAL_TYPE_USED",
+                    "EXTERNAL_API_WARNING",
+                    "FIELD_VALUE_OVERRIDEN",
+                    "INJECTED_KERNELS_DEPRECATED",
+                    "INVALID_HEALTH_CHECK_FOR_DYNAMIC_WIEGHTED_LB",
+                    "LARGE_DEPLOYMENT_WARNING",
+                    "LIST_OVERHEAD_QUOTA_EXCEED",
+                    "MISSING_TYPE_DEPENDENCY",
+                    "NEXT_HOP_ADDRESS_NOT_ASSIGNED",
+                    "NEXT_HOP_CANNOT_IP_FORWARD",
+                    "NEXT_HOP_INSTANCE_HAS_NO_IPV6_INTERFACE",
+                    "NEXT_HOP_INSTANCE_NOT_FOUND",
+                    "NEXT_HOP_INSTANCE_NOT_ON_NETWORK",
+                    "NEXT_HOP_NOT_RUNNING",
+                    "NOT_CRITICAL_ERROR",
+                    "NO_RESULTS_ON_PAGE",
+                    "PARTIAL_SUCCESS",
+                    "QUOTA_INFO_UNAVAILABLE",
+                    "REQUIRED_TOS_AGREEMENT",
+                    "RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING",
+                    "RESOURCE_NOT_DELETED",
+                    "SCHEMA_VALIDATION_IGNORED",
+                    "SINGLE_INSTANCE_PROPERTY_TEMPLATE",
+                    "UNDECLARED_PROPERTIES",
+                    "UNREACHABLE",
+                  ],
+                },
+              },
+              additionalProperties: true,
+            },
+          },
+          operationType: {
+            type: "string",
+          },
+          targetLink: {
+            type: "string",
+          },
+          instancesBulkInsertOperationMetadata: {
+            type: "object",
+            properties: {
+              perLocationStatus: {
+                type: "object",
+                additionalProperties: true,
+              },
+            },
+            additionalProperties: true,
+          },
+          error: {
+            type: "object",
+            properties: {
+              errors: {
+                type: "array",
+                items: {
+                  type: "object",
+                  properties: {
+                    code: {
+                      type: "object",
+                      additionalProperties: true,
+                    },
+                    message: {
+                      type: "object",
+                      additionalProperties: true,
+                    },
+                    errorDetails: {
+                      type: "object",
+                      additionalProperties: true,
+                    },
+                    location: {
+                      type: "object",
+                      additionalProperties: true,
+                    },
+                  },
+                  additionalProperties: true,
+                },
+              },
+            },
+            additionalProperties: true,
+          },
+          endTime: {
+            type: "string",
+          },
+          httpErrorStatusCode: {
+            type: "number",
+          },
+          operationGroupId: {
+            type: "string",
+          },
+          description: {
+            type: "string",
+          },
+          name: {
+            type: "string",
+          },
+          selfLink: {
+            type: "string",
+          },
+          clientOperationId: {
+            type: "string",
+          },
+          insertTime: {
+            type: "string",
+          },
+          status: {
+            type: "string",
+            enum: ["DONE", "PENDING", "RUNNING"],
+          },
+          progress: {
+            type: "number",
+          },
+        },
+        additionalProperties: true,
+      },
+    },
+  },
+};
+
+export default subnetworksInsert;
